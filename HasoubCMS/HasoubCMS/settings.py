@@ -141,3 +141,7 @@ MESSAGE_TAGS={
     messages.ERROR:'alert-danger',
 
 }
+
+
+Email_BACKEND='django.core.mail.backends.console.EmailBackend'
+ACCOUNT_EMAIL_VERIFICATION = 'none'

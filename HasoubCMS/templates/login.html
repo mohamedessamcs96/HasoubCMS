@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 
 <!Doctype html>
 <html>
@@ -10,7 +10,9 @@
                 {% csrf_token %}
                 {{login_form}}
                 <button type="submit">Login</button>
-            </form>
+            </form><hr>
+            <p><a href="{% url 'password_reset' %}">Forget your password</a></p>
+
         {% endblock %}
     </body>
 </html>

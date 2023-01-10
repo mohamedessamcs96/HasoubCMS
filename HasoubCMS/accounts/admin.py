@@ -11,10 +11,22 @@ class AppUserAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+
+
+from .models import Attendance,AttendanceClass,Student,Teacher,Class,Week,Day,Semester
+
 admin.site.site_header="Hasoub CMS Admin Panel"
 admin.site.site_title="Hasoub CMS Admin Panel"
 #admin.site.index_template='templates/base.html'
 
 
+admin.site.register(Attendance)
+admin.site.register(AttendanceClass)
+admin.site.register(Student)
+admin.site.register(Class)
+admin.site.register(Teacher)
+admin.site.register(Semester)
+admin.site.register(Week)
+admin.site.register(Day)
 admin.site.register(AppUser,AppUserAdmin)
 admin.site.unregister(Group)

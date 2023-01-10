@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 
 <!Doctype html>
 <html>
@@ -9,8 +9,8 @@
             {% include 'partials/messages.html' %}
             <form method="POST">
                 {% csrf_token %}
-                {{register_form}}
-                <button type="submit">Login</button>
+                {{register_form.as_p}}
+                <button type="submit">Register</button>
             </form>
         {% endblock %}
     </body>
