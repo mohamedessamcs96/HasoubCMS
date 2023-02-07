@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+<!Doctype html>
+<html>
+    <head></head>
+    <body>
+        {%block content%}
+            <h1>Register</h1>
+            {% include 'partials/messages.html' %}
+            {% if courses %}  
+        <ul>   
+            {% for course in courses %}  
+                <li>{{ course }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}  
+      
+            <form method="POST">
+                {% csrf_token %}
+                {{course.as_p}}
+                <button type="submit">ADD</button>
+            </form>
+        {% endblock %}
+    </body>
+</html>
+
+

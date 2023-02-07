@@ -45,3 +45,13 @@ MESSAGE_TAGS={
         </div>
         </div>
     {% endfor %}
+
+
+
+
+# In many to many Relation ship
+    Your problem is with setting the default value on the ManyToMany relation for project_views and project_likes. The ManyToMany field is expecting some form of a queryset or list (since its many), but in your case you set it to 0 as int. Change your 2 fields like so (notice field default),
+
+...
+project_views   = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,related_name='project_views',default=[0])
+project_likes   = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,related_name='project_likes',default=[0]

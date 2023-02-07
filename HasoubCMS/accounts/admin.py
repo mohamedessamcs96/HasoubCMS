@@ -13,7 +13,7 @@ class AppUserAdmin(admin.ModelAdmin):
 
 
 
-from .models import Attendance,AttendanceClass,Student,Teacher,Class,Week,Day,Semester
+from .models import Attendance,AttendanceClass,Student,Teacher,Class,Week,Day,Semester,Course
 
 admin.site.site_header="Hasoub CMS Admin Panel"
 admin.site.site_title="Hasoub CMS Admin Panel"
@@ -28,5 +28,6 @@ admin.site.register(Teacher)
 admin.site.register(Semester)
 admin.site.register(Week)
 admin.site.register(Day)
+admin.site.register(Course)
 admin.site.register(AppUser,AppUserAdmin)
 admin.site.unregister(Group)

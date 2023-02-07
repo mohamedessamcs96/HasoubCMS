@@ -84,3 +84,67 @@ def logout_request(request):
 
 def home_page(request):
     return render(request,'sara.html')
+
+
+
+
+
+@login_required(login_url='/login')   
+def add_course(request):
+    if request.user.is_superuser or request.user.is_staff:   
+        if request.method=="POST":
+            form=AddCourse(request.POST)
+            if form.is_valid():
+                    form=form.save()
+                    messages.success(request,"added Sucessfully")
+                    return redirect('homepage')
+            print("unsucessful")
+            messages.error(request,get_error_message(request))
+            courses = Course.objects.all()  
+            return render(request, 'add_course.html', {'courses': courses,'form':form})
+    form=AddCourse()
+    courses = Course.objects.all()  
+    return render(request, 'add_course.html', {'courses': courses,'form':form})
+
+
+@login_required(login_url='/login')    
+def edit_course(request,id):
+    course = Course.objects.get(auto_increment_id=id) 
+    form=AddCourse()
+    return render(request, 'edit_course.html', {'course': course,'add_course':form})
+
+
+
+@login_required(login_url='/login')    
+def delete_course(request,id):
+    course = Course.objects.get(id=id) 
+    return render(request, 'delete_course.html', {'course': course})
+
+
+
+
+
+
+@login_required(login_url='/login')    
+def add_class(request):
+    if request.user.is_superuser or request.user.is_staff:
+        if request.method=="POST":
+            form=AddClass(request.POST)
+            if form.is_valid():
+                form=form.save()
+                messages.success(request,"added Sucessfully")
+                return redirect('homepage')
+            print("unsucessful")
+            messages.error(request,get_error_message(request))
+            return render(request=request,template_name='add_class.html',context={'add_class':form})
+            #return HttpResponse("Invalid")
+        else:
+            form=AddClass()
+            return render(request=request,template_name='add_class.html',context={'add_class':form})
+        # now = datetime.datetime.now()
+        # html = "<html><body>It is now %s.</body></html>" % now
+        # return HttpResponse(html)
+    else:
+        return HttpResponse("Not super user")
+
+

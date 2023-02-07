@@ -3,6 +3,8 @@ from django.contrib.auth.models import User,AbstractUser
 
 # Create your models here.
 from datetime import datetime as dt
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
 TIMES_SLOTS = (
@@ -50,10 +52,13 @@ GENDER_CHOICES=(
     )
 
 class AppUser(AbstractUser):
-
-    email=models.EmailField(max_length=50,unique=True)
-    #USERNAME_FIELD='email'
-    #REQUIRED_FIELDS=['email']
+    #
+    email=models.EmailField(unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+    #USERNAME_FIELD = 'username'
+    fname=models.CharField(max_length=18,default='')
+    lname=models.CharField(max_length=18,default='')
     parent_phone=models.CharField(max_length=18,default='+20')
     birthdate=models.DateField(null=True)
     gender=models.CharField(max_length=1,choices=GENDER_CHOICES, default='male')
@@ -61,28 +66,31 @@ class AppUser(AbstractUser):
     is_admin=models.BooleanField(default=False)
     is_superuser=models.BooleanField(default=False)
 
-class Course(models.Model):
-    id = models.CharField(primary_key='True', max_length=50)
+
+
+from django.conf import settings
+
+
+
+class Course(models.Model):# Subject
+    auto_increment_id = models.AutoField(primary_key=True)
+    author=models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True
+    )
+
+    coursecode = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     shortname = models.CharField(max_length=50, default='X')
+    USERNAME_FIELD = 'author'
+
+    def __str__(self):
+        return 'Subject name:'+self.shortname
 
 
-
-class Class(models.Model):
-    courses = models.ManyToManyField(Course, default=1)
-    id = models.CharField(primary_key='True', max_length=100)
-    section = models.CharField(max_length=100)
-    
     
 
-
-class Student(models.Model):
-    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True)
-    class_id = models.ForeignKey(Class, on_delete=models.CASCADE, default=1)
-    USN = models.CharField(primary_key='True', max_length=100)
-    name = models.CharField(max_length=200)
-    sex = models.CharField(max_length=50, choices=GENDER_CHOICES, default='Male')
-    DOB = models.DateField(default='1998-01-01')
 
 
 
@@ -131,7 +139,27 @@ class Attendance(models.Model):
 """
 
 
+class Class(models.Model):
+    auto_increment_id = models.AutoField(primary_key=True)
+    classcode = models.CharField(max_length=50)
+    name=models.CharField(max_length=20,unique=True)
+    coursesid = models.ForeignKey(Course,on_delete=models.CASCADE)
+    datefrom=models.TimeField(auto_now=False, auto_now_add=False)
+    dateto=models.TimeField(auto_now=False, auto_now_add=False) 
+    studentname = models.ForeignKey(AppUser, on_delete=models.CASCADE, null=True, related_name='studentINclass')
+    teachername = models.ForeignKey(AppUser, on_delete=models.CASCADE, null=True,related_name='teacherINclass')
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    USERNAME_FIELD = 'author'
+    def __str__(self):
+        return self.name+':'+self.classcode
 
+class Student(models.Model):
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True)
+    class_id = models.ForeignKey(Class, on_delete=models.CASCADE, default=1)
+    USN = models.CharField(primary_key='True', max_length=100)
+    name = models.CharField(max_length=200)
+    sex = models.CharField(max_length=50, choices=GENDER_CHOICES, default='Male')
+    DOB = models.DateField(default='1998-01-01')
 
 class Assign(models.Model):
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE)

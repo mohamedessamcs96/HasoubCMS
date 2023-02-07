@@ -18,5 +18,9 @@ urlpatterns=[
     path('password_reset/done/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset/done/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
+    path('add_class/',views.add_class,name='addclass'),
+    path('add_course/',views.add_course,name='addcourse'),
+    path('edit_course/<int:id>',views.edit_course,name='editcourse'),
+    path('delete_course/<int:id>',views.delete_course,name='deletecourse')
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
